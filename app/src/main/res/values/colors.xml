@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorFQ">#F22780</color>
+    <color name="fqTheme">#6593F5</color>
+    <color name="fqThemeDark">#008ECC</color>
+    <color name="fqBackgroundWhite">#FFFFFF</color>
+    <!--<color name="fqLayoutBackground">#87CEFA</color>-->
+    <color name="TextColor">#222222</color>
+    <color name="ErrorTextColor">#FF0000</color>
+    <color name="CurrentTab">#F22780</color>
+</resources>

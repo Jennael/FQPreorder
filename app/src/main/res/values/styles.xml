@@ -1,0 +1,33 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/fqBackgroundWhite</item>
+        <item name="android:textColor">@color/TextColor</item>
+        <item name="colorPrimary">@color/fqTheme</item>
+        <item name="colorPrimaryDark">@color/fqThemeDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <style name="LoginTheme" parent="Theme.AppCompat">
+        <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item> <!-- No Action Bar! -->
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/fqThemeDark</item>
+        <item name="android:textColor">@color/TextColor</item>
+        <item name="colorPrimary">@color/fqTheme</item>
+        <item name="colorPrimaryDark">@color/fqThemeDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="MainTitle" parent="Theme.AppCompat.DayNight.NoActionBar">
+
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+</resources>

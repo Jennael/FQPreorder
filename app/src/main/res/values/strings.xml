@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">FQPreorder</string>
+
+    <string name="login_error_prompt">You have keyed in the wrong ID! Try again.</string>
+    <string name="menu">Menu</string>
+    <string name="settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="numOfPreorders">Number of Preorders</string>
+    <string name="deadlineOfPreorders">Deadline of Preorders</string>
+    <string name="stop_preorder">Stop Preorder</string>
+    <string name="number_of_preorders">Number of Preorders:</string>
+    <string name="time_left">Time left:</string>
+    <string name="preorder_time_is_up">Preorder Time is Up!</string>
+    <string name="you_can_continue_preparations">You can continue preparations.</string>
+    <string name="preorder_number_is_reached">Preorder Number is Reached!</string>
+
+    <string-array name="numOfOrders">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+    </string-array>
+
+</resources>
+
+
+
+
+

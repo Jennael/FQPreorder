@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsMain"
+    android:orientation="vertical"
+    android:gravity="top">
+
+    <android.support.design.widget.NavigationView
+        android:layout_width="match_parent"
+        android:layout_height="56sp"
+        app:menu="@menu/menu"
+        android:background="@color/fqTheme">
+
+    </android.support.design.widget.NavigationView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/fqTheme">
+        <Button
+            android:id="@+id/queuePage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Queue"
+            android:fontFamily="@font/source_code_pro"
+            android:background="@null"
+            android:onClick="gotoQueue"/>
+        <Button
+            android:id="@+id/preorderPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Preorder"
+            android:fontFamily="@font/source_code_pro"
+            android:background="@null"
+            android:onClick="gotoPreorder"/>
+
+    </LinearLayout>
+
+</LinearLayout>
