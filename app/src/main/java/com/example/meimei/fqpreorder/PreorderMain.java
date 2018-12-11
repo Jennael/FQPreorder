@@ -18,6 +18,8 @@ import android.widget.TextView;
 
 import java.util.Date;
 
+import static com.example.meimei.fqpreorder.ConvertTime.dateToString;
+
 public class PreorderMain extends AppCompatActivity {
 
     private String user_name;
@@ -28,6 +30,8 @@ public class PreorderMain extends AppCompatActivity {
     Button preorderGo;
     Button preorderEndButton1;
     Button preorderEndButton2;
+    Button stopPreorder;
+
     Spinner preorderDeadlineMenu;
     Spinner preorderCountMenu;
 
@@ -65,6 +69,7 @@ public class PreorderMain extends AppCompatActivity {
         preorderGo = findViewById(R.id.preorder_button);
         preorderEndButton1 = findViewById(R.id.preorder_closeButton_timereached);
         preorderEndButton2 = findViewById(R.id.preorder_closeButton_countreached);
+        stopPreorder = findViewById(R.id.preorder_stop_button);
 
         text_preordercount = (TextView) findViewById(R.id.preorder_ordercount);
         text_timeleft = (TextView) findViewById(R.id.preorder_timeleft);
@@ -79,6 +84,7 @@ public class PreorderMain extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter_preorderCount =
                 ArrayAdapter.createFromResource(this, R.array.numOfOrders, android.R.layout.simple_spinner_dropdown_item);
         preorderCountMenu.setAdapter(adapter_preorderCount);
+
         preorderCountMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -127,8 +133,7 @@ public class PreorderMain extends AppCompatActivity {
                 currentDeadline = new DeadlineCheck(nextDeadline);
                 currentCount = new CountCheck(preorderCount);
 
-                new PreorderAsyncTask().execute(currentDeadline.stopPreorder(), currentCount.stopPreorder());
-
+                new PreorderAsyncTask().execute();
             }
         });
 
@@ -156,50 +161,94 @@ public class PreorderMain extends AppCompatActivity {
             }
         });
 
+        stopPreorder.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         // create toolbar!
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
     }
 
-    public class PreorderAsyncTask extends AsyncTask<Boolean, Void, Void> {
 
-        @Override
-        protected Void doInBackground(Boolean... params) {
 
-            while (!params[0] && !params[1]){
+
+
+
+
+
+
+
+    public class PreorderAsyncTask extends AsyncTask<Void, String, String> {
+
+        protected String doInBackground(Void... voids) {
+            String result = "";
+            while (!currentCount.stopPreorder() && !currentDeadline.stopPreorder()){
                 Log.i("Preorder", "In Progress");
-
+                //Log.i("Preorder", dateToString(currentDeadline.current())[0]+dateToString(currentDeadline.current())[1]);
+                //Log.i("Preorder", dateToString(currentDeadline.deadline())[0]+dateToString(currentDeadline.deadline())[1]);
+                //Log.i("Preorder", Boolean.toString(currentDeadline.stopPreorder()));
+                publishProgress(Integer.toString(currentCount.getCurrent()), currentDeadline.timeLeft());
                 if(isCancelled()){
                     break;
                 }
             }
-
             if (currentCount.stopPreorder()){
                 Log.i("Preorder", "Limit reached");
+                result = "limit";
+            } else if (currentDeadline.stopPreorder()){ //assume currentDeadline.stopPreorder() == true
+                Log.i("Preorder", "Time's up");
+                result = "time";
+            } else if (isCancelled()){
+                Log.i("Preorder", "Cancelled");
+                result = "cancelled";
+            }
+            Log.i("Preorder", "Ended for no reason");
+            return result;
+        }
+
+        protected void onProgressUpdate(String... params){
+            text_preordercount.setText(params[0]);
+            text_timeleft.setText(params[1]);
+        }
+
+        @Override
+        protected void onPostExecute(String param){
+            if (param == "cancelled"){
+                pre_main.setVisibility(View.VISIBLE);
+                pre_prog.setVisibility(View.INVISIBLE);
+                pre_time.setVisibility(View.INVISIBLE);
+                pre_count.setVisibility(View.INVISIBLE);
+            } else if (param == "limit"){
                 pre_main.setVisibility(View.INVISIBLE);
                 pre_prog.setVisibility(View.INVISIBLE);
                 pre_time.setVisibility(View.INVISIBLE);
                 pre_count.setVisibility(View.VISIBLE);
-
-            } else if (currentDeadline.stopPreorder()){ //assume currentDeadline.stopPreorder() == true
-                Log.i("Preorder", "Time's up");
+            } else if (param == "time"){
                 pre_main.setVisibility(View.INVISIBLE);
                 pre_prog.setVisibility(View.INVISIBLE);
                 pre_time.setVisibility(View.VISIBLE);
                 pre_count.setVisibility(View.INVISIBLE);
-            } else if (isCancelled()){
-                Log.i("Preorder", "Cancelled");
+            } else {
+                pre_main.setVisibility(View.VISIBLE);
+                pre_prog.setVisibility(View.INVISIBLE);
+                pre_time.setVisibility(View.INVISIBLE);
+                pre_count.setVisibility(View.INVISIBLE);
             }
-            Log.i("Preorder", "Ended for no reason");
-            return null;
-        }
-
-        protected Void onProgressUpdate(){
-            text_preordercount.setText(currentCount.getCurrent());
-            text_timeleft.setText(currentDeadline.timeLeft());
-            return null;
         }
     }
+
+
+
+
+
+
+
+
+
 
     public void gotoQueue(View view) {
         Intent queue = new Intent(this, QueueMain.class);

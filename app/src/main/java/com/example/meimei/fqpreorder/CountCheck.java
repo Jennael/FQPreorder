@@ -2,11 +2,11 @@ package com.example.meimei.fqpreorder;
 
 public class CountCheck {
 
-    private int preorder_limit;
+    private final int PREORDER_LIMIT;
     private int database_count;
 
     public CountCheck(String count){
-        preorder_limit = Integer.parseInt(count);
+        PREORDER_LIMIT = Integer.parseInt(count);
     }
 
     private void retrieval(){
@@ -16,7 +16,7 @@ public class CountCheck {
 
     public Boolean stopPreorder() {
         retrieval();
-        if (database_count >= preorder_limit){
+        if (database_count >= PREORDER_LIMIT){
             return true;
         }
         return false;
