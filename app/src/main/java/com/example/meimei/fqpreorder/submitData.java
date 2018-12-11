@@ -11,24 +11,36 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class submitData {
 
-    private static String WEBSERVICE ="store/preorder.php";
+    private static String WEBSERVICE ="store/preorderrequirements.php/insert.php?";
     private static String SERVER = "http://fastqueue.000webhostapp.com/";
-    private int GET_DATA = 0;
-    private String urlWebService;
-    //private String loginID;
-    //private TextView loginError;
-    ArrayList objects;
+    private static String nPreorders = "num_of_preorder=";
+    private static String dPreorders = "&preorder_ready_time=";
 
+    /*
     public static void main(String[] args) throws IOException {
-
-        String server = SERVER + WEBSERVICE;
+        String count = "5";
+        String timing = "2018-12-10 09:30:00.000000";
+        String server = SERVER + WEBSERVICE + "num_of_preorder=6&preorder_ready_time=2018-12-10%2009:30:00.000000";
+        String encodedServer = URLEncoder.encode(server, "UTF-8");
         String json = submitData(server);
         System.out.println(json);
+    }
+    */
+
+    public static String submit (String n, String yyyymmdd, String hhmmss ) throws IOException {
+
+        String YMD = yyyymmdd.replace(":", "-");
+
+        String server = SERVER + WEBSERVICE + nPreorders + n + dPreorders + YMD + "%20" + hhmmss + ".000000";
+        String encodedServer = URLEncoder.encode(server, "UTF-8");
+        String json = submitData(server);
+        return json;
     }
 
     public static String submitData (String server) throws IOException {

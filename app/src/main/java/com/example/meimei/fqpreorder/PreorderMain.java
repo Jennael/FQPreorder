@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.Date;
 
 import static com.example.meimei.fqpreorder.ConvertTime.dateToString;
@@ -122,6 +123,14 @@ public class PreorderMain extends AppCompatActivity {
             public void onClick(View v) {
                 //interact with sql server, 2 important values are strings preorderDeadline, preorderCount
                 //TODO send preorderDeadline to database: Date preorderDeadline or String preorderDeadlineTime
+                try {
+                    String out = submitData.submit(preorderCount, ConvertTime.dateToString(preorderDeadline)[0], ConvertTime.dateToString(preorderDeadline)[1]);
+                    if (out == null){
+                        Log.i("Preorder", "Data sent");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 pre_main.setVisibility(View.INVISIBLE);
                 pre_prog.setVisibility(View.VISIBLE);
