@@ -89,6 +89,7 @@ public class PreorderMain extends AppCompatActivity {
         preorderCountMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.i("Preorder", "preorder count: " + preorderCount);
                 preorderCount = String.valueOf(parent.getItemAtPosition(position));
             }
 
@@ -123,14 +124,22 @@ public class PreorderMain extends AppCompatActivity {
             public void onClick(View v) {
                 //interact with sql server, 2 important values are strings preorderDeadline, preorderCount
                 //TODO send preorderDeadline to database: Date preorderDeadline or String preorderDeadlineTime
-                try {
-                    String out = submitData.submit(preorderCount, ConvertTime.dateToString(preorderDeadline)[0], ConvertTime.dateToString(preorderDeadline)[1]);
-                    if (out == null){
-                        Log.i("Preorder", "Data sent");
+                new Thread(new Runnable(){
+                    @Override
+                    public void run() {
+                        try {
+                            String out = submitData.submit(preorderCount, ConvertTime.dateToString(preorderDeadline)[0], ConvertTime.dateToString(preorderDeadline)[1]);
+                            if (out == null){
+                                Log.i("Preorder", "Data sent: " +preorderCount + ConvertTime.dateToString(preorderDeadline)[0] + ConvertTime.dateToString(preorderDeadline)[1]);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                }).start();
 
                 pre_main.setVisibility(View.INVISIBLE);
                 pre_prog.setVisibility(View.VISIBLE);
@@ -173,7 +182,10 @@ public class PreorderMain extends AppCompatActivity {
         stopPreorder.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                pre_main.setVisibility(View.VISIBLE);
+                pre_prog.setVisibility(View.INVISIBLE);
+                pre_time.setVisibility(View.INVISIBLE);
+                pre_count.setVisibility(View.INVISIBLE);
             }
         });
 
