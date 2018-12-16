@@ -16,6 +16,8 @@ import android.widget.ArrayAdapter;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.util.Date;
 
@@ -119,16 +121,15 @@ public class PreorderMain extends AppCompatActivity {
             }
         });
 
+        //datacase connection
         preorderGo.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                //interact with sql server, 2 important values are strings preorderDeadline, preorderCount
-                //TODO send preorderDeadline to database: Date preorderDeadline or String preorderDeadlineTime
                 new Thread(new Runnable(){
                     @Override
                     public void run() {
                         try {
-                            String out = submitData.submit(preorderCount, ConvertTime.dateToString(preorderDeadline)[0], ConvertTime.dateToString(preorderDeadline)[1]);
+                            String out = submitData.submitPreorder(preorderCount, ConvertTime.dateToString(preorderDeadline)[0], ConvertTime.dateToString(preorderDeadline)[1]);
                             if (out == null){
                                 Log.i("Preorder", "Data sent: " +preorderCount + ConvertTime.dateToString(preorderDeadline)[0] + ConvertTime.dateToString(preorderDeadline)[1]);
                             }
@@ -207,25 +208,38 @@ public class PreorderMain extends AppCompatActivity {
 
         protected String doInBackground(Void... voids) {
             String result = "";
-            while (!currentCount.stopPreorder() && !currentDeadline.stopPreorder()){
-                Log.i("Preorder", "In Progress");
-                //Log.i("Preorder", dateToString(currentDeadline.current())[0]+dateToString(currentDeadline.current())[1]);
-                //Log.i("Preorder", dateToString(currentDeadline.deadline())[0]+dateToString(currentDeadline.deadline())[1]);
-                //Log.i("Preorder", Boolean.toString(currentDeadline.stopPreorder()));
-                publishProgress(Integer.toString(currentCount.getCurrent()), currentDeadline.timeLeft());
-                if(isCancelled()){
-                    break;
+            try {
+                while (!currentCount.stopPreorder() && !currentDeadline.stopPreorder()){
+                    Log.i("Preorder", "In Progress");
+                    //Log.i("Preorder", dateToString(currentDeadline.current())[0]+dateToString(currentDeadline.current())[1]);
+                    //Log.i("Preorder", dateToString(currentDeadline.deadline())[0]+dateToString(currentDeadline.deadline())[1]);
+                    //Log.i("Preorder", Boolean.toString(currentDeadline.stopPreorder()));
+                    publishProgress(Integer.toString(currentCount.getCurrent()), currentDeadline.timeLeft());
+                    if(isCancelled()){
+                        break;
+                    }
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            if (currentCount.stopPreorder()){
-                Log.i("Preorder", "Limit reached");
-                result = "limit";
-            } else if (currentDeadline.stopPreorder()){ //assume currentDeadline.stopPreorder() == true
-                Log.i("Preorder", "Time's up");
-                result = "time";
-            } else if (isCancelled()){
-                Log.i("Preorder", "Cancelled");
-                result = "cancelled";
+
+            try {
+                if (currentCount.stopPreorder()){
+                    Log.i("Preorder", "Limit reached");
+                    result = "limit";
+                } else if (currentDeadline.stopPreorder()){ //assume currentDeadline.stopPreorder() == true
+                    Log.i("Preorder", "Time's up");
+                    result = "time";
+                } else if (isCancelled()){
+                    Log.i("Preorder", "Cancelled");
+                    result = "cancelled";
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
             Log.i("Preorder", "Ended for no reason");
             return result;
